@@ -5,69 +5,101 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     [Header("Di chuyển")]
-    public float speed = 5f;          // Tốc độ di chuyển
-    public float jumpHeight = 2f;     // Độ cao nhảy
-    public float gravity = -9.81f;    // Trọng lực
+    public float speed = 5f;
+    public float jumpHeight = 2f;
+    public float gravity = -9.81f;
 
     [Header("Camera")]
-    public Transform cameraTransform; // Camera theo dõi
-    public float mouseSensitivity = 2f; // Độ nhạy chuột
+    public Transform cameraTransform;
+    public float mouseSensitivity = 2f;
+
+    [SerializeField] GameObject lightSource;
+
+    [Header("Âm thanh bước chân")]
+    [SerializeField] private float stepDelay = 0.6f;
+    private float stepTimer = 0f;
 
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
     private float xRotation = 0f;
-    [SerializeField] GameObject lightSource;
     private bool lightOn = false;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked; // Ẩn và khóa chuột
+        Cursor.lockState = CursorLockMode.Locked;
         lightSource.SetActive(false);
     }
 
     void Update()
     {
-        // 📡 Kiểm tra xem có chạm đất không
-        isGrounded = controller.isGrounded;
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
+        HandleMovementAndJump();
+        ApplyGravity();
+        HandleCamera();
+        HandleFlashlightToggle();
+        HandleFootsteps();
+    }
 
-        // 🎮 Nhận input từ bàn phím
+    void HandleMovementAndJump()
+    {
+        isGrounded = controller.isGrounded;
+
+        if (isGrounded && velocity.y < 0)
+            velocity.y = -2f;
+
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        // Di chuyển theo hướng của nhân vật
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
         controller.Move(move * speed * Time.deltaTime);
 
-        // 🏃‍♂️ Nhảy khi bấm phím "Jump"
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+    }
 
-        // 🚀 Áp dụng trọng lực
+    void ApplyGravity()
+    {
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
 
-        // 🖱 Xử lý camera xoay theo chuột
+    void HandleCamera()
+    {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Giới hạn góc nhìn lên/xuống
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
+    }
 
+    void HandleFlashlightToggle()
+    {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             lightOn = !lightOn;
             lightSource.SetActive(lightOn);
+            AudioManager.instance.TryPlayTorchClick();
+        }
+    }
+
+    void HandleFootsteps()
+    {
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
+        bool isMoving = new Vector2(moveX, moveZ).magnitude > 0.1f;
+
+        stepTimer -= Time.deltaTime;
+
+        if (isMoving && isGrounded && stepTimer <= 0f)
+        {
+            AudioManager.instance.TryPlayFootSteps();
+            stepTimer = stepDelay;
         }
     }
 }
