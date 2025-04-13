@@ -10,6 +10,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip torchClick;
 
     private int randomIndex;
+    private int lastIndex = -1;
+
 
     void Awake()
     {
@@ -22,11 +24,17 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     public void TryPlayFootSteps()
     {
         if (FootSteps == null || FootSteps.Length == 0 || audioSource == null) return;
 
-        randomIndex = Random.Range(0, FootSteps.Length);
+        do
+        {
+            randomIndex = Random.Range(0, FootSteps.Length);
+        } while (randomIndex == lastIndex);
+
+        lastIndex = randomIndex;
         audioSource.PlayOneShot(FootSteps[randomIndex]);
     }
 
