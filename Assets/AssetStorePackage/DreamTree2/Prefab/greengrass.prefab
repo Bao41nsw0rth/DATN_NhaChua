@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2755773098453887015}
   - component: {fileID: 6140128183545688176}
   m_Layer: 0
-  m_Name: grass plant 01
+  m_Name: greengrass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ LODGroup:
   m_GameObject: {fileID: 6019070555036615377}
   serializedVersion: 2
   m_LocalReferencePoint: {x: -0.041535735, y: 0.22500002, z: 0.010912061}
-  m_Size: 1.3918291
+  m_Size: 25
   m_FadeMode: 1
   m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
