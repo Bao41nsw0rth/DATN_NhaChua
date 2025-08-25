@@ -1,0 +1,51 @@
+name: LFS Auto Track
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  lfs-auto-track:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # cần quyền để push lại commit
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Install Git LFS
+        run: |
+          git lfs install
+
+      - name: Find and track big files
+        run: |
+          LIMIT=$((100*1024*1024))
+          files=$(find . -type f -size +100M -not -path "./.git/*")
+
+          if [ -z "$files" ]; then
+            echo "✅ Không có file >100MB."
+            exit 0
+          fi
+
+          for f in $files; do
+            if ! head -n 1 "$f" | grep -q "version https://git-lfs.github.com/spec"; then
+              echo "⚡ File $f >100MB → auto track bằng Git LFS"
+              git lfs track "$f"
+              git add .gitattributes
+              git add "$f"
+            fi
+          done
+
+          if git diff --cached --quiet; then
+            echo "✅ Không có thay đổi cần commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore: auto track big files with Git LFS"
+            git push
+          fi
