@@ -39,7 +39,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Amplitude: 0.5
-    - _Blend: 0.05
+    - _Blend: 0
     - _Fullscreen_DepthWrite: 1
     - _NoiseScale: 30
     m_Colors:

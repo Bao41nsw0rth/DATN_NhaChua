@@ -16,8 +16,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] GameObject lightSource;
 
     [Header("Âm thanh bước chân")]
-    [SerializeField] private float stepDelay = 0.6f;
+    [SerializeField] private float stepDelay = 0.7f;
     private float stepTimer = 0f;
+
+    [Header("Túi đồ")] [SerializeField] private GameObject Inventory;
 
     private CharacterController controller;
     private Vector3 velocity;
@@ -25,11 +27,17 @@ public class CharacterMovement : MonoBehaviour
     private float xRotation = 0f;
     private bool lightOn = false;
 
+    private float baseSpeed;
+    private float baseStepDelay;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         lightSource.SetActive(false);
+
+        baseSpeed = speed;
+        baseStepDelay = stepDelay;
     }
 
     void Update()
@@ -54,15 +62,6 @@ public class CharacterMovement : MonoBehaviour
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
         controller.Move(move * speed * Time.deltaTime);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            speed = speed * 2f;
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            speed = speed / 2f;
-        }
-
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -71,6 +70,24 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+        
+        HandlePlayerRun();
+    }
+
+    void HandlePlayerRun()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = baseSpeed * 2f;
+            stepDelay = baseStepDelay / 2f;
+            stepTimer = 0f;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = baseSpeed;
+            stepDelay = baseStepDelay;
+            stepTimer = 0f;
         }
     }
 
@@ -82,6 +99,7 @@ public class CharacterMovement : MonoBehaviour
 
     void HandleCamera()
     {
+        if (Inventory.activeSelf) return;
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
@@ -92,8 +110,6 @@ public class CharacterMovement : MonoBehaviour
         cameraTransform.rotation = Quaternion.Euler(xRotation, transform.eulerAngles.y, 0f);
         cameraTransform.position = transform.position + Vector3.up * 6f;
     }
-
-
 
     void HandleFlashlightToggle()
     {
