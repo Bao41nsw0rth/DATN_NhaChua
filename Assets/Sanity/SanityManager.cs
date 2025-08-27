@@ -6,6 +6,7 @@ public class SanityManager : MonoBehaviour
     [SerializeField] private GameObject fullScreenFX;
     [SerializeField] private Material screenDistortionMaterial;
     [SerializeField] private float decreaseInterval = 1.25f;
+    [SerializeField] private float recoverInterval = 5f;
     [SerializeField] private bool canLoseSanity = false;
 
     private int Sanity = 100;
@@ -22,27 +23,31 @@ public class SanityManager : MonoBehaviour
 
     private void Start()
     {
-        StartSanityCoroutine();
+        sanityCoroutine = StartCoroutine(SanityRoutine());
     }
 
-    private void StartSanityCoroutine()
+    private IEnumerator SanityRoutine()
     {
-        resetCoroutines();
+        float decreaseTimer = 0f;
+        float recoverTimer = 0f;
 
-        if (canLoseSanity)
-            sanityCoroutine = StartCoroutine(DecreaseSanityOverTime());
-    }
-
-    private IEnumerator DecreaseSanityOverTime()
-    {
-        while (Sanity > 0)
+        while (true)
         {
-            yield return new WaitForSeconds(decreaseInterval);
+            yield return null;
 
-            if (canLoseSanity)
+            decreaseTimer += Time.deltaTime;
+            recoverTimer += Time.deltaTime;
+
+            if (canLoseSanity && decreaseTimer >= decreaseInterval)
             {
-                Sanity -= 1;
-                Debug.Log("Sanity: " + Sanity);
+                Sanity = Mathf.Max(Sanity - 1, 0);
+                decreaseTimer = 0f;
+            }
+
+            if (!canLoseSanity && recoverTimer >= recoverInterval)
+            {
+                Sanity = Mathf.Min(Sanity + 10, 100);
+                recoverTimer = 0f;
             }
         }
     }
@@ -50,26 +55,11 @@ public class SanityManager : MonoBehaviour
     public void SetLoseSanity(bool value)
     {
         canLoseSanity = value;
-
-        if (canLoseSanity && sanityCoroutine == null)
-        {
-            sanityCoroutine = StartCoroutine(DecreaseSanityOverTime());
-        }
-        else if (!canLoseSanity && sanityCoroutine != null)
-        {
-            StopCoroutine(sanityCoroutine);
-            sanityCoroutine = null;
-        }
     }
 
-    private void resetCoroutines()
+    private void Update()
     {
-        StopAllCoroutines();
-        sanityCoroutine = null;
-    }
-
-    private void FixedUpdate()
-    {
+        Debug.Log(message: "sanity " + Sanity);
         float newBlend = Mathf.PingPong(Time.time * 0.1f, 0.2f);
         UpdateState();
 
@@ -80,7 +70,8 @@ public class SanityManager : MonoBehaviour
                 break;
 
             case PlayerState.distortion:
-                if (fullScreenFX != null) fullScreenFX.SetActive(true);
+                if (newBlend > 0.1f) fullScreenFX.SetActive(true);
+                else fullScreenFX.SetActive(false);
                 break;
 
             case PlayerState.insane:
@@ -89,13 +80,14 @@ public class SanityManager : MonoBehaviour
                 {
                     screenDistortionMaterial.SetFloat("_Blend", newBlend);
                 }
+
                 break;
         }
     }
 
     private void UpdateState()
     {
-        if (Sanity > 60)
+        if (Sanity > 50)
             state = PlayerState.normal;
         else if (Sanity > 30)
             state = PlayerState.distortion;
