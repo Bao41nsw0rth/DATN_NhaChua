@@ -2,110 +2,47 @@
 
 public class GhostBehavior : MonoBehaviour
 {
-    [Header("Path Settings")]
-    public PathGroup pathGroup;
+    public PathGroup pathGroup; // Nhóm waypoint
     public float speed = 5f;
     public float rotationSpeed = 5f;
     public float waypointThreshold = 0.1f;
 
-    [Header("Detection Settings")]
-    public string playerTag = "Player";
-    public float detectAngle = 90f;    // Góc nhìn (vùng 1)
-    public float detectDistance = 10f; // Phạm vi nhìn thấy Player (vùng 1)
-    public float chaseDistance = 5f;   // Khoảng cách để bắt đầu di chuyển theo waypoint (vùng 2)
+    [Header("Detection Zone")]
+    public Collider detectionZone; // Vùng trigger 3D để ghost kích hoạt
 
-    [Header("Animation")]
-    public Animator animator;
-    public string animIdle = "Idle";  // Animation 1
-    public string animRun = "Run";    // Animation 2
-    public string animEnd = "End";    // Animation 3
-
-    private Transform player;
     private int currentWaypointIndex = 0;
-    private bool isChasing = false;
-    private bool isEnding = false;
+    private bool isActive = false;
 
     void Start()
     {
         if (pathGroup == null || pathGroup.waypoints.Count == 0)
         {
-            Debug.LogError("Chưa gán PathGroup hoặc waypoint trống!");
+            Debug.LogError("PathGroup chưa gán waypoint!");
             enabled = false;
             return;
         }
 
-        player = GameObject.FindGameObjectWithTag(playerTag)?.transform;
-        if (animator != null) animator.Play(animIdle); // animation 1 khi bắt đầu
+        transform.position = pathGroup.waypoints[0].position;
     }
 
     void Update()
     {
-        if (isEnding) return; // Nếu đang kết thúc thì không làm gì nữa
-
-        if (!isChasing)
-        {
-            DetectPlayer();
-        }
-        else
-        {
+        if (isActive)
             Patrol();
-        }
-    }
-
-    void DetectPlayer()
-    {
-        if (player == null) return;
-
-        Vector3 dirToPlayer = player.position - transform.position;
-        float distance = dirToPlayer.magnitude;
-
-        if (distance <= detectDistance)
-        {
-            // Kiểm tra góc nhìn
-            float angle = Vector3.Angle(transform.forward, dirToPlayer);
-            if (angle <= detectAngle * 0.5f)
-            {
-                // Kích hoạt animation1 (Idle/Hù dọa)
-                if (animator != null) animator.Play(animIdle);
-
-                // Nếu Player vào vùng 2 → bắt đầu di chuyển theo waypoint
-                if (distance <= chaseDistance)
-                {
-                    isChasing = true;
-                    if (animator != null) animator.Play(animRun); // animation 2
-                }
-            }
-        }
     }
 
     void Patrol()
     {
-        if (pathGroup == null || pathGroup.waypoints.Count == 0) return;
+        Transform targetWaypoint = pathGroup.waypoints[currentWaypointIndex];
+        Vector3 direction = (targetWaypoint.position - transform.position).normalized;
 
-        Transform target = pathGroup.waypoints[currentWaypointIndex];
-        Vector3 direction = (target.position - transform.position).normalized;
-        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, speed * Time.deltaTime);
         RotateTowards(direction);
 
-        if (Vector3.Distance(transform.position, target.position) < waypointThreshold)
+        if (Vector3.Distance(transform.position, targetWaypoint.position) < waypointThreshold)
         {
-            currentWaypointIndex++;
-
-            // Nếu tới waypoint cuối → phát animation3 rồi hủy
-            if (currentWaypointIndex >= pathGroup.waypoints.Count)
-            {
-                StartCoroutine(EndSequence());
-            }
+            currentWaypointIndex = (currentWaypointIndex + 1) % pathGroup.waypoints.Count;
         }
-    }
-
-    System.Collections.IEnumerator EndSequence()
-    {
-        isEnding = true;
-        if (animator != null) animator.Play(animEnd); // animation 3
-        // Đợi animation 3 chạy xong (giả sử dài 2 giây)
-        yield return new WaitForSeconds(2f);
-        Destroy(gameObject);
     }
 
     void RotateTowards(Vector3 direction)
@@ -118,26 +55,38 @@ public class GhostBehavior : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnTriggerEnter(Collider other)
     {
-        // Vẽ vùng phát hiện (vùng 1)
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectDistance);
+        if (other.CompareTag("Player"))
+            isActive = true;
+    }
 
-        // Vẽ vùng di chuyển (vùng 2)
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, chaseDistance);
+    // Vẽ Gizmos cho Scene view
+    private void OnDrawGizmos()
+    {
+        // Vẽ vùng trigger nếu có
+        if (detectionZone != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(detectionZone.bounds.center, detectionZone.bounds.size);
+        }
 
-        // Vẽ góc nhìn
-        Vector3 forward = transform.forward;
-        Quaternion leftRayRotation = Quaternion.Euler(0, -detectAngle / 2, 0);
-        Quaternion rightRayRotation = Quaternion.Euler(0, detectAngle / 2, 0);
+        // Vẽ đường waypoint
+        if (pathGroup != null && pathGroup.waypoints.Count > 1)
+        {
+            Gizmos.color = Color.green;
+            for (int i = 0; i < pathGroup.waypoints.Count - 1; i++)
+            {
+                if (pathGroup.waypoints[i] != null && pathGroup.waypoints[i + 1] != null)
+                {
+                    Gizmos.DrawLine(pathGroup.waypoints[i].position, pathGroup.waypoints[i + 1].position);
 
-        Vector3 leftRay = leftRayRotation * forward * detectDistance;
-        Vector3 rightRay = rightRayRotation * forward * detectDistance;
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + leftRay);
-        Gizmos.DrawLine(transform.position, transform.position + rightRay);
+                    // Vẽ mũi tên nhỏ chỉ hướng
+                    Vector3 dir = (pathGroup.waypoints[i + 1].position - pathGroup.waypoints[i].position).normalized;
+                    Vector3 arrowPos = pathGroup.waypoints[i].position + dir * 0.5f;
+                    Gizmos.DrawRay(arrowPos, dir * 0.5f);
+                }
+            }
+        }
     }
 }
