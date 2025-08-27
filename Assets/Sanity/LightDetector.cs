@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LightDetector : MonoBehaviour
 {
-    public float lightThreshold = 1000f;
+    public float lightThreshold = 10000f;
     private SanityManager playerEffects;
 
     void Start()
@@ -13,7 +13,6 @@ public class LightDetector : MonoBehaviour
     void Update()
     {
         float totalLight = CalculateLightAtPosition(transform.position);
-        Debug.Log(message: "Total Light Intensity: " + totalLight);
 
         if (totalLight < lightThreshold)
         {
