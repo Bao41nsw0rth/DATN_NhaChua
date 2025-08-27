@@ -1,33 +1,50 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerHistory : MonoBehaviour
 {
-    [Tooltip("Thời gian lưu lịch sử (giây)")]
-    public float recordTime = 10f;
+    [Tooltip("Thời gian choáng khi trở về vị trí ban đầu (giây)")]
+    public float stunDuration = 2f;
 
-    private class PositionRecord
+    private Vector3 initialPosition;
+    private bool isStunned = false;
+    private float stunEndTime;
+
+    void Start()
     {
-        public Vector3 position;
-        public float time;
+        initialPosition = transform.position;
     }
-
-    private List<PositionRecord> positions = new List<PositionRecord>();
 
     void Update()
     {
-        // Thêm vị trí hiện tại vào lịch sử
-        positions.Add(new PositionRecord { position = transform.position, time = Time.time });
-
-        // Xóa các vị trí quá cũ (trên 15 giây)
-        float thresholdTime = Time.time - recordTime;
-        positions.RemoveAll(p => p.time < thresholdTime);
+        if (isStunned)
+        {
+            if (Time.time >= stunEndTime)
+            {
+                isStunned = false;
+                // Bật lại script di chuyển nếu cần
+                // GetComponent<PlayerMovement>().enabled = true;
+            }
+        }
     }
 
-    // Lấy vị trí cách 'recordTime' giây trước
+    // Quay về vị trí ban đầu
+    public void ReturnToInitialPosition()
+    {
+        transform.position = initialPosition;
+        Stun(stunDuration);
+    }
+
+    // Gây choáng
+    private void Stun(float duration)
+    {
+        isStunned = true;
+        stunEndTime = Time.time + duration;
+        // GetComponent<PlayerMovement>().enabled = false;
+    }
+
+    // Giữ lại hàm này để tránh lỗi (trả về vị trí ban đầu)
     public Vector3 GetPositionAgo()
     {
-        if (positions.Count == 0) return transform.position;
-        return positions[0].position; // vị trí cũ nhất trong 15 giây
+        return initialPosition;
     }
 }
