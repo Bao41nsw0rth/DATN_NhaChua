@@ -16,7 +16,5 @@ public class PathGroup : MonoBehaviour
             if (waypoints[i] != null && waypoints[i + 1] != null)
                 Gizmos.DrawLine(waypoints[i].position, waypoints[i + 1].position);
         }
-
-        // Không nối vòng nữa, bỏ loop
     }
 }

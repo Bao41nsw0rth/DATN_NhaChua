@@ -3,14 +3,14 @@
 public class GhostPatrol : MonoBehaviour
 {
     public PathGroup pathGroup;
-    public float speed = 3f;
+    public float speed = 10f;
     public float rotationSpeed = 5f;
     public float waypointThreshold = 0.1f;
 
     [Header("Player Detection")]
     public string playerTag = "Player";
     public float viewAngle = 180f; // Góc nhìn
-    public float viewDistance = 10f; // Khoảng cách nhìn
+    public float viewDistance = 50f; // Khoảng cách nhìn
 
     private int currentWaypointIndex = 0;
     private Transform player;
@@ -78,15 +78,15 @@ public class GhostPatrol : MonoBehaviour
         RotateTowards(direction);
     }
 
-    void RotateTowards(Vector3 direction)
+void RotateTowards(Vector3 direction)
+{
+    Vector3 flatDirection = new Vector3(direction.x, 0, direction.z); // Xoá trục Y
+    if (flatDirection.sqrMagnitude > 0.001f)
     {
-        Vector3 flatDirection = new Vector3(direction.x, 0, direction.z);
-        if (flatDirection.sqrMagnitude > 0.001f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(flatDirection, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
+        Quaternion targetRotation = Quaternion.LookRotation(flatDirection, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
+}
 
     bool CanSeePlayer()
     {
@@ -141,7 +141,6 @@ public class GhostPatrol : MonoBehaviour
         // Vẽ bán kính tầm nhìn
         Gizmos.DrawWireSphere(transform.position, viewDistance);
 
-#if UNITY_EDITOR
         // Vẽ hình quạt 2 đường biên (góc nhìn)
         Vector3 forward = transform.forward;
         Quaternion leftRayRotation = Quaternion.Euler(0, -viewAngle / 2, 0);
@@ -152,7 +151,12 @@ public class GhostPatrol : MonoBehaviour
 
         Gizmos.DrawLine(transform.position, transform.position + leftRay);
         Gizmos.DrawLine(transform.position, transform.position + rightRay);
-#endif
     }
-
+    void LateUpdate()
+    {
+        // Khóa trục X
+        Vector3 euler = transform.eulerAngles;
+        euler.x = 90f;
+        transform.eulerAngles = euler;
+    }
 }
