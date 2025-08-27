@@ -4,10 +4,8 @@ using System.Collections;
 public class SanityManager : MonoBehaviour
 {
     [SerializeField] private GameObject fullScreenFX;
-    [SerializeField] private Camera playerCamera;
     [SerializeField] private Material screenDistortionMaterial;
-
-    [SerializeField] private float decreaseInterval = 2f;
+    [SerializeField] private float decreaseInterval = 1.25f;
     [SerializeField] private bool canLoseSanity = false;
 
     private int Sanity = 100;
@@ -20,10 +18,17 @@ public class SanityManager : MonoBehaviour
         insane
     }
 
-    private PlayerState state;
+    private PlayerState state = PlayerState.normal;
 
     private void Start()
     {
+        StartSanityCoroutine();
+    }
+
+    private void StartSanityCoroutine()
+    {
+        resetCoroutines();
+
         if (canLoseSanity)
             sanityCoroutine = StartCoroutine(DecreaseSanityOverTime());
     }
@@ -57,28 +62,21 @@ public class SanityManager : MonoBehaviour
         }
     }
 
-    public void RecoverSanity(int amount)
+    private void resetCoroutines()
     {
-        Sanity += amount;
-
-        if (Sanity > 100)
-            Sanity = 100;
-
-        Debug.Log("Sanity recovered! Current Sanity: " + Sanity);
+        StopAllCoroutines();
+        sanityCoroutine = null;
     }
-
 
     private void FixedUpdate()
     {
+        float newBlend = Mathf.PingPong(Time.time * 0.1f, 0.2f);
         UpdateState();
 
         switch (state)
         {
             case PlayerState.normal:
                 if (fullScreenFX != null) fullScreenFX.SetActive(false);
-
-                if (screenDistortionMaterial != null)
-                    screenDistortionMaterial.SetFloat("_Blend", 0f);
                 break;
 
             case PlayerState.distortion:
@@ -89,7 +87,6 @@ public class SanityManager : MonoBehaviour
                 if (fullScreenFX != null) fullScreenFX.SetActive(true);
                 if (screenDistortionMaterial != null)
                 {
-                    float newBlend = Mathf.PingPong(Time.time * 0.1f, 0.2f);
                     screenDistortionMaterial.SetFloat("_Blend", newBlend);
                 }
                 break;
@@ -98,7 +95,7 @@ public class SanityManager : MonoBehaviour
 
     private void UpdateState()
     {
-        if (Sanity > 50)
+        if (Sanity > 60)
             state = PlayerState.normal;
         else if (Sanity > 30)
             state = PlayerState.distortion;
