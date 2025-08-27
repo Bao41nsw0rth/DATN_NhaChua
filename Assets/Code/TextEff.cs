@@ -8,8 +8,8 @@ public class TextEff : MonoBehaviour
     [SerializeField] TextMeshProUGUI _textMeshPro;
     [SerializeField] GameObject objectToDestroy; // Tham chiếu đến GameObject cần xóa
     public string[] stringArray;
-    [SerializeField] float timeBtwnChars;
-    [SerializeField] float timeBtwnWords;
+    [SerializeField] float timeBtwnChars = 0.03f; // Giảm thời gian giữa các ký tự để tăng tốc
+    [SerializeField] float timeBtwnWords = 0.5f; // Giảm thời gian giữa các từ/câu để tăng tốc
     int i = 0;
 
     void Start()
@@ -63,10 +63,9 @@ public class TextEff : MonoBehaviour
 
     private IEnumerator DestroyObjectAfterDelay()
     {
-        // Chờ 1 giây trước khi xóa
-        yield return new WaitForSeconds(1f);
+        // Chờ 0.5 giây trước khi xóa
+        yield return new WaitForSeconds(0.5f);
 
-        // Kiểm tra xem objectToDestroy có tồn tại không trước khi xóa
         if (objectToDestroy != null)
         {
             Destroy(objectToDestroy);
