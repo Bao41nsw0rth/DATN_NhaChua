@@ -7,6 +7,9 @@ public class CabinetInteraction : MonoBehaviour, IInteractable
     public float openAngle = 90f;
     public float speed = 3f;
 
+    public AudioClip interactionSFX;
+    private AudioSource audioSource;
+
     private bool isOpen = false;
     private bool isMoving = false;
     private Quaternion closedRot;
@@ -16,6 +19,8 @@ public class CabinetInteraction : MonoBehaviour, IInteractable
     {
         closedRot = door.localRotation;
         openRot = Quaternion.Euler(door.localEulerAngles + new Vector3(0, openAngle, 0));
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Interact()
@@ -25,10 +30,15 @@ public class CabinetInteraction : MonoBehaviour, IInteractable
             isOpen = !isOpen;
             StopAllCoroutines();
             StartCoroutine(RotateDoor());
+
+            if (audioSource != null)
+            {
+                audioSource.PlayOneShot(interactionSFX);
+            }
         }
     }
 
-    IEnumerator RotateDoor()
+        IEnumerator RotateDoor()
     {
         isMoving = true;
         Quaternion target = isOpen ? openRot : closedRot;

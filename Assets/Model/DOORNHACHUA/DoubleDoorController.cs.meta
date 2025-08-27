@@ -1,11 +1,9 @@
 fileFormatVersion: 2
-guid: 48a58297d2c1c5b42918c4170c69af3c
+guid: 06406214b756e094895a8a863b7a0f6e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - door: {instanceID: 0}
-  - interactionSFX: {fileID: 8300000, guid: 7ba4a7f92c668fa45b797c72c51364a5, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

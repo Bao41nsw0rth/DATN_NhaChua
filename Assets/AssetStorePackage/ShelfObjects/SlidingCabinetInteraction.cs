@@ -8,6 +8,10 @@ public class SlidingCabinetInteraction : MonoBehaviour, IInteractable
     public float openDistance = 0.5f; // khoảng cách trượt ngang
     public float speed = 2f;
 
+
+    public AudioClip interactionSFX;
+    private AudioSource audioSource;
+
     private bool isOpen = false;
     private bool isMoving = false;
     private Vector3 closedPos;
@@ -18,6 +22,8 @@ public class SlidingCabinetInteraction : MonoBehaviour, IInteractable
         closedPos = drawer.localPosition;
         // 👇 thay đổi trục X thay vì Z
         openPos = closedPos + new Vector3(openDistance, 0, 0);
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Interact()
@@ -27,6 +33,11 @@ public class SlidingCabinetInteraction : MonoBehaviour, IInteractable
             isOpen = !isOpen;
             StopAllCoroutines();
             StartCoroutine(MoveDrawer());
+
+            if (audioSource != null)
+            {
+                audioSource.PlayOneShot(interactionSFX);
+            }
         }
     }
 

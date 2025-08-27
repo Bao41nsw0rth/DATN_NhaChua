@@ -8,6 +8,9 @@ public class DrawerInteraction : MonoBehaviour, IInteractable
     public float openDistance = 0.2f;
     public float speed = 3f;
 
+    public AudioClip interactionSFX;   // âm thanh mở
+    private AudioSource audioSource;
+
     private bool isOpen = false;
     private bool isMoving = false;
     private Vector3 closedPos;
@@ -17,6 +20,8 @@ public class DrawerInteraction : MonoBehaviour, IInteractable
     {
         closedPos = drawer.localPosition;
         openPos = closedPos + new Vector3(0, 0, openDistance);
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Interact()   // gọi khi player nhấn E và chỉ vào
@@ -26,6 +31,11 @@ public class DrawerInteraction : MonoBehaviour, IInteractable
             isOpen = !isOpen;
             StopAllCoroutines();
             StartCoroutine(MoveDrawer());
+
+            if (audioSource != null)
+            {
+                audioSource.PlayOneShot(interactionSFX);
+            }
         }
     }
 

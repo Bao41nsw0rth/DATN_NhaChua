@@ -3,7 +3,9 @@ guid: 111d413704731ba4cb7d351b41f756aa
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - drawer: {instanceID: 0}
+  - interactionSFX: {fileID: 8300000, guid: 291e8f45e436138408fb319e434a1b9c, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
