@@ -6,30 +6,33 @@ using UnityEngine.SceneManagement;
 public class StoryTeller : MonoBehaviour
 {
     [Header("UI References")]
-    public TextMeshProUGUI storyText;        
-    public TextMeshProUGUI promptText;       
-    public CanvasGroup canvasGroup;          
-    public CanvasGroup promptCanvasGroup;    
+    public TextMeshProUGUI storyText;
+    public TextMeshProUGUI promptText;
+    public CanvasGroup canvasGroup;
+    public CanvasGroup promptCanvasGroup;
 
     [Header("Story")]
     [TextArea(3, 10)]
-    public string[] storyParts;              
-    public float typingSpeed = 0.03f;        
-    public float punctuationPause = 0.20f;   
+    public string[] storyParts;
+    public float typingSpeed = 0.03f;
+    public float punctuationPause = 0.20f;
 
     [Header("Fade & Scene")]
     public float fadeDuration = 0.6f;
-    public string nextSceneName = "MainScene";        
+    public string nextSceneName = "MainScene";
 
     [Header("Audio (optional)")]
-    public AudioSource sfxSource;           
+    public AudioSource sfxSource;
     public AudioClip typingSfx;
-    public AudioSource ambientSource;       
+    public AudioSource ambientSource;
 
     private int currentIndex = 0;
     private bool isTyping = false;
     private Coroutine typingCoroutine;
     private string currentFullText = "";
+
+    private AsyncOperation preloadOperation;
+    private bool storyFinished = false;
 
     IEnumerator Start()
     {
@@ -40,6 +43,13 @@ public class StoryTeller : MonoBehaviour
 
         if (canvasGroup != null) yield return StartCoroutine(FadeCanvas(0f, 1f, fadeDuration));
         yield return new WaitForSeconds(0.15f);
+
+        if (!string.IsNullOrEmpty(nextSceneName))
+        {
+            preloadOperation = SceneManager.LoadSceneAsync(nextSceneName);
+            preloadOperation.allowSceneActivation = false; // chỉ cho phép sau khi story kết thúc
+        }
+
         ShowNextPart();
     }
 
@@ -55,10 +65,17 @@ public class StoryTeller : MonoBehaviour
                 if (promptCanvasGroup != null) StartCoroutine(FadePrompt(0f, 1f, 0.18f));
                 else if (promptText != null) promptText.gameObject.SetActive(true);
             }
-            else
+            else if (!storyFinished)
             {
+                // Chưa hết story → chuyển sang câu tiếp
                 ShowNextPart();
             }
+            else
+            {
+                // Đã hết story → giờ mới cho chuyển MainScene
+                StartCoroutine(EndSequence());
+            }
+
         }
     }
 
@@ -72,7 +89,11 @@ public class StoryTeller : MonoBehaviour
         }
         else
         {
-            StartCoroutine(EndSequence());
+            storyFinished = true;
+
+            // Hiện prompt "Nhấn Space để tiếp tục"
+            if (promptCanvasGroup != null) StartCoroutine(FadePrompt(0f, 1f, 0.2f));
+            else if (promptText != null) promptText.gameObject.SetActive(true);
         }
     }
 
@@ -84,7 +105,7 @@ public class StoryTeller : MonoBehaviour
         if (promptCanvasGroup != null) promptCanvasGroup.alpha = 0f;
         if (promptText != null) promptText.gameObject.SetActive(false);
 
-        storyText.lineSpacing = 50f; 
+        storyText.lineSpacing = 50f;
 
         for (int i = 0; i < textToShow.Length; i++)
         {
