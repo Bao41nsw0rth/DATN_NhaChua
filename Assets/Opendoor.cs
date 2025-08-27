@@ -3,9 +3,9 @@
 public class RotateOnCollision : MonoBehaviour
 {
     private bool isRotating = false; // Trạng thái quay
-    private float rotationSpeed = 500f; // Tốc độ quay (độ/giây)
+    private float rotationSpeed = 50f; // Tốc độ quay (độ/giây)
     private float rotationTimer = 0f; // Bộ đếm thời gian
-    private float rotationDuration; // Thời gian quay (ngẫu nhiên từ 1 đến 4 giây)
+    private float rotationDuration = 2f; // Thời gian quay cố định (2 giây)
 
     void OnCollisionEnter(Collision collision)
     {
@@ -13,8 +13,7 @@ public class RotateOnCollision : MonoBehaviour
         if (collision.gameObject.CompareTag("keyT"))
         {
             isRotating = true; // Bắt đầu quay
-            rotationDuration = Random.Range(1f, 4f); // Chọn ngẫu nhiên thời gian quay từ 1 đến 4 giây
-            rotationTimer = 0f; // Reset bộ đếm
+            rotationTimer = 0f; // Đặt lại bộ đếm thời gian
         }
     }
 
@@ -22,13 +21,13 @@ public class RotateOnCollision : MonoBehaviour
     {
         if (isRotating)
         {
-            // Quay GameObject quanh trục Y (hoặc trục bạn muốn)
+            // Quay GameObject quanh trục Y
             transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
 
             // Tăng bộ đếm thời gian
             rotationTimer += Time.deltaTime;
 
-            // Dừng quay khi đạt thời gian ngẫu nhiên
+            // Dừng quay khi đạt thời gian cố định
             if (rotationTimer >= rotationDuration)
             {
                 isRotating = false;
