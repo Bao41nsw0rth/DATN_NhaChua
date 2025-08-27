@@ -13,10 +13,19 @@ MonoBehaviour:
   m_Name: "B\u1EE9c th\u01B0 1"
   m_EditorClassIdentifier: 
   id: bucThu01
-  itemName: "t\xEAn"
-  itemDescription: "m\xF4 t\u1EA3"
+  itemName: "Th\u01B0 tuy\u1EC7t m\u1EC7nh"
+  itemDescription: "L\xE1 th\u01B0 h\xECnh nh\u01B0 vi\u1EBFt cho m\xECnh"
   itemPrefab: {fileID: 4035940929292758424, guid: 9f667c8adc32aa24b88f698796a029e8,
     type: 3}
   itemType: 0
   itemRotation: {x: 0.49999997, y: -0.49999997, z: 0.49999997, w: 0.49999997}
-  noteContent: 
+  noteContent: "\u0110\xEAm nay, ta c\xF9ng s\u01B0 ph\u1EE5 th\u1EED phong \u1EA5n
+    chu\xF4ng. Nh\u01B0ng ta \u0111\xE3 kh\xF4ng \u0111\u1EE7 can \u0111\u1EA3m.
+    Ta \u0111\xE3 l\u1EA5y m\xE1u \u0111\u1EE9a b\xE9\u2026 Ta nghe ti\u1EBFng g\xE0o
+    th\xE9t, th\u1EA5y m\u1EAFt n\xF3 tr\u1EE3n tr\u1EEBng. Tr\u1EE5 tr\xEC nh\xECn
+    ta \u0111\u1EA7y th\u1EA5t v\u1ECDng\u2026 R\u1ED3i m\u1ECDi th\u1EE9 ch\xECm
+    trong l\u1EEDa. Ta \u0111\xE3 phong \u1EA5n \u0111\u01B0\u1EE3c t\u1EA1m th\u1EDDi,
+    nh\u01B0ng b\u1EB1ng c\xE1i gi\xE1 kh\u1EE7ng khi\u1EBFp. \r\nN\u1EBFu ai \u0111\u1ECDc
+    \u0111\u01B0\u1EE3c, \u0111\xF3 h\u1EB3n l\xE0 con ta. Ti\u1EC3u Minh\u2026 con
+    ph\u1EA3i ch\u1EA5m d\u1EE9t l\u1EDDi nguy\u1EC1n n\xE0y, d\xF9 b\u1EB1ng c\xE1i
+    ch\u1EBFt c\u1EE7a ch\xEDnh con."

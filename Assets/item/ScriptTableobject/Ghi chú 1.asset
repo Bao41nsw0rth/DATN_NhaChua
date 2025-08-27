@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: "Ghi ch\xFA 1"
   m_EditorClassIdentifier: 
   id: ghiChu01
-  itemName: "t\u1EDD ghi ch\xFA"
-  itemDescription: "m\xF4 ta ghi ch\xFA"
+  itemName: "Trang nh\u1EADt k\xFD"
+  itemDescription: "trang cu\u1ED1i trong nh\u1EADt k\xFD c\u1EE7a cha, r\u01A1i
+    \u1EDF b\xE0n th\u1EDD trong h\u1EA7m \u0111\xE1"
   itemPrefab: {fileID: 2633406820449838505, guid: 643169d30d1d2994e9080a34adfcbd3a,
     type: 3}
   itemType: 0
   itemRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
-  noteContent: "n\u1ED9i dug ghi ch\xFA"
+  noteContent: "Ta h\xE8n nh\xE1t. Ta kh\xF4ng d\xE1m hi sinh, n\xEAn \u0111\xE3
+    l\u1EA5y gi\u1ECDt m\xE1u c\u1EE7a ch\xEDnh con trai m\xECnh. Nghi l\u1EC5 v\u1EE1
+    tan. Bao nhi\xEAu sinh linh ch\u1EBFt oan. N\u1EBFu chu\xF4ng g\u1ECDi, ng\u01B0\u1EDDi
+    nghe ch\u1EC9 c\xF3 th\u1EC3 l\xE0 n\xF3\u2026 Ti\u1EC3u Minh"

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: chiaKhoa01
   itemName: "Ch\xECa kh\xF3a"
-  itemDescription: 
+  itemDescription: "M\u1ED9t chi\u1EBFc ch\xECa kh\xF3a"
   itemPrefab: {fileID: 4006796778444349398, guid: 540e667e566ed2040b22172b41eb2db3,
     type: 3}
   itemType: 2
+  itemRotation: {x: 0, y: 0, z: 0, w: 0}
   unlockTargetID: 

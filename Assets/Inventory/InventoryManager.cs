@@ -23,6 +23,7 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI ItemName;
     [SerializeField] private TextMeshProUGUI ItemDescription;
+    [SerializeField] private TextMeshProUGUI ItemContent;
     [SerializeField] private InventoryPreviewer previewer;
 
     [Header("Items")] [SerializeField] private List<Item> allItems; // danh sách toàn bộ Item trong game
@@ -46,6 +47,7 @@ public class InventoryManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        InventoryMenu.SetActive(false);
     }
 
     private void Update()
@@ -96,6 +98,16 @@ public class InventoryManager : MonoBehaviour
         Item currentItem = items[currentIndex];
         ItemName.text = currentItem.itemName;
         ItemDescription.text = currentItem.itemDescription;
+
+        if (currentItem is NoteItem noteItem)
+        {
+            ItemContent.text = noteItem.noteContent;
+        }
+        else
+        {
+            ItemContent.text = "";
+        }
+
         previewer.ShowItem(currentItem.itemPrefab, currentItem.itemRotation);
     }
 

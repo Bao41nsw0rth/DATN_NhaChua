@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: "B\u1EE9c th\u01B0 2"
   m_EditorClassIdentifier: 
   id: bucthu02
-  itemName: "th\u01B0 s\u1ED1 2"
-  itemDescription: mo ta
+  itemName: "Th\u01B0 tuy\u1EC7t m\u1EC7nh"
+  itemDescription: "L\xE1 th\u01B0 tuy\u1EC7t m\u1EC7nh cha ch\u01B0a g\u1EEDi cho
+    m\u1EB9"
   itemPrefab: {fileID: 9025872073943722205, guid: 306618a40c3bcbc4e920b7c8294f6daf,
     type: 3}
   itemType: 0
   itemRotation: {x: 0.49999997, y: -0.49999997, z: 0.49999997, w: 0.49999997}
-  noteContent: 
+  noteContent: "Anh xin l\u1ED7i. Anh \u0111\xE3 kh\xF4ng b\u1EA3o v\u1EC7 \u0111\u01B0\u1EE3c
+    ai. N\u1EBFu c\xF2n g\u1EB7p l\u1EA1i, xin em \u0111\u1EEBng cho con \u0111\u1EBFn
+    g\u1EA7n n\u01A1i \u1EA5y. Chu\xF4ng nh\u1EDB n\xF3. Anh \u0111\xE3 nghe ti\u1EBFng
+    g\u1ECDi. N\u1EBFu em y\xEAu con, h\xE3y tr\u1ED1n th\u1EADt xa"

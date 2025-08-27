@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: "M\u1EABu gi\u1EA5y 3"
   m_EditorClassIdentifier: 
   id: mauGiay03
-  itemName: 
-  itemDescription: 
+  itemName: "M\u1EABu gi\u1EA5y ch\xE1y x\xE9m"
+  itemDescription: "L\xE1 th\u01B0 ch\u01B0a g\u1EEDi c\u1EE7a ni c\xF4, t\xECm th\u1EA5y
+    trong gian ph\xF2ng n\u1EEF tu"
   itemPrefab: {fileID: 8462986288780051856, guid: 7d2aba111a720b94ab462819c57e7aa2,
     type: 3}
   itemType: 0
-  noteContent: 
+  itemRotation: {x: 0, y: 0, z: 0, w: 0}
+  noteContent: "M\u1EB9 cha \u01A1i, con run l\u1EAFm. H\u1ECD n\xF3i c\u1EA7n ng\u01B0\u1EDDi
+    gi\u1EEF v\xF2ng huy\u1EBFt ch\xFA, con \u0111\u01B0\u1EE3c g\u1ECDi t\xEAn.
+    N\u1EBFu con kh\xF4ng tr\u1EDF v\u1EC1, xin \u0111\u1EEBng t\xECm con\u2026"

@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: "B\u1EE9c th\u01B0 3"
   m_EditorClassIdentifier: 
   id: bucthu03
-  itemName: "th\u01B0 s\u1ED1 3"
-  itemDescription: "m\xF4 t\u1EA3"
+  itemName: "Th\u01B0 tuy\u1EC7t m\u1EC7nh"
+  itemDescription: "L\xE1 th\u01B0 tuy\u1EC7t m\u1EC7nh c\u1EE7a cha \u0111\u1EB7t
+    c\u1EA1nh chu\xF4ng"
   itemPrefab: {fileID: 3929217895841016523, guid: 26b6feafc9e3cee48aab04f0ed845e8b,
     type: 3}
   itemType: 0
   itemRotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
-  noteContent: 
+  noteContent: "N\u1EBFu con t\xECm \u0111\u1EBFn \u0111\xE2y, \u0111\xF3 l\xE0 \u0111\u1ECBnh
+    m\u1EC7nh. Ch\u1EC9 con m\u1EDBi gi\u1EA3i tho\xE1t \u0111\u01B0\u1EE3c h\u1ECD\u2026
+    v\xE0 ta"
