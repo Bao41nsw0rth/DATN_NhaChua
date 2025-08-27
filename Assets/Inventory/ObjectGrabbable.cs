@@ -1,36 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ObjectGrabbable : MonoBehaviour
 {
-    private Rigidbody objectRigidbody;
-    private Transform ObjectGrabPointTransform;
-
-    private void Awake()
+    [SerializeField] private GameObject InventoryMenu;
+    [SerializeField] private TextMeshProUGUI ItemName;
+    [SerializeField] private TextMeshProUGUI ItemDescription;
+    [SerializeField] private InventoryPreviewer previewer;
+    
+    public void OnGrab()
     {
-        objectRigidbody = GetComponent<Rigidbody>();
-    }
+        Item item = gameObject.GetComponent<ItemComponent>()?.itemData;
 
-    public void OnGrab(Transform ObjectGrabPointTransform)
-    {
-        this.ObjectGrabPointTransform = ObjectGrabPointTransform;
-        objectRigidbody.useGravity = false;
+        if (item == null) return;
+
+        InventoryMenu.SetActive(true);
+
+        ItemName.text = item.name;
+        ItemDescription.text = item.itemDescription;
+        previewer.ShowItem(item.itemPrefab, item.itemRotation);
+        
+        gameObject.SetActive(false);
     }
 
     public void OnDrop()
     {
-        this.ObjectGrabPointTransform = null;
-        objectRigidbody.useGravity = true;
-    }
-
-    private void FixedUpdate()
-    {
-        if (ObjectGrabPointTransform == null)
-            return;
-
-        float lerpSpeed = 10f;
-        Vector3 newPosition = Vector3.Lerp(transform.position, ObjectGrabPointTransform.position, Time.deltaTime * lerpSpeed);
-        objectRigidbody.MovePosition(newPosition);
+        gameObject.SetActive(true);
+        InventoryMenu.SetActive(false);
     }
 }

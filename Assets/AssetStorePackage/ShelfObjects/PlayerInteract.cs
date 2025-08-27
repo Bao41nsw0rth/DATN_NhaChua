@@ -9,7 +9,6 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
-
         Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * interactDistance, Color.green);
         if (Input.GetKeyDown(KeyCode.E))
         {

@@ -36,7 +36,7 @@ public class LetterInteraction : MonoBehaviour
                 if (hit.transform == transform)
                 {
                     // Nhấn phím E để bật/tắt GameObject 11
-                    if (Input.GetKeyDown(KeyCode.E))
+                    if (Input.GetKeyDown(KeyCode.Mouse1))
                     {
                         if (objectToToggle != null)
                         {

@@ -5,12 +5,9 @@ using UnityEngine;
 public class PlayerPickUp : MonoBehaviour
 {
     [SerializeField] private Transform PlayerCameraTransform;
-    [SerializeField] private Transform ObjectGrabPointTransform;
     [SerializeField] private LayerMask layerMask;
 
     private ObjectGrabbable objectGrabbable;
-    //Inventory inventory = new Inventory();
-
 
     void Update()
     {
@@ -19,11 +16,12 @@ public class PlayerPickUp : MonoBehaviour
             float maxDistance = 25f;
             if (objectGrabbable == null)
             {
-                if (Physics.Raycast(PlayerCameraTransform.position, PlayerCameraTransform.forward, out RaycastHit raycastHit, maxDistance, layerMask))
+                if (Physics.Raycast(PlayerCameraTransform.position, PlayerCameraTransform.forward,
+                        out RaycastHit raycastHit, maxDistance, layerMask))
                 {
                     if (raycastHit.transform.TryGetComponent(out objectGrabbable))
                     {
-                        objectGrabbable.OnGrab(ObjectGrabPointTransform);
+                        objectGrabbable.OnGrab();
                     }
                 }
             }
@@ -48,9 +46,9 @@ public class PlayerPickUp : MonoBehaviour
             {
                 InventoryManager.Instance.AddItem(item);
                 Destroy(objectGrabbable.gameObject);
+                InventoryManager.Instance.ToggleInventory();
                 objectGrabbable = null;
             }
         }
-
     }
 }

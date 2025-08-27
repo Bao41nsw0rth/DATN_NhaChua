@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36bf93677a2d6b74880be2263c5a39f3, type: 3}
+  m_Name: "\u0110\xE8n pin"
+  m_EditorClassIdentifier: 
+  id: denPin01
+  itemName: "\u0110\xE8n pin"
+  itemDescription: motadenpin
+  itemPrefab: {fileID: 6043547344774118737, guid: 03152076bcbdfc348ae7884c063f39cf,
+    type: 3}
+  itemType: 0
+  itemRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  noteContent: 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36bf93677a2d6b74880be2263c5a39f3, type: 3}
+  m_Name: "Ghi ch\xFA 1"
+  m_EditorClassIdentifier: 
+  id: ghiChu01
+  itemName: "t\u1EDD ghi ch\xFA"
+  itemDescription: "m\xF4 ta ghi ch\xFA"
+  itemPrefab: {fileID: 2633406820449838505, guid: 643169d30d1d2994e9080a34adfcbd3a,
+    type: 3}
+  itemType: 0
+  itemRotation: {x: 0, y: 0, z: 1, w: -0.00000004371139}
+  noteContent: "n\u1ED9i dug ghi ch\xFA"
